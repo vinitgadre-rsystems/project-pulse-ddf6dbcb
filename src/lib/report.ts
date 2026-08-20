@@ -112,6 +112,8 @@ export type MilestoneRow = {
   feature: string;
   businessValue: string;
   month: string;
+  userStories?: number | null;
+  storyPoints?: number | null;
 };
 
 export type ParsedReport = {
@@ -993,16 +995,32 @@ export function parseMilestoneSheet(workbook: XLSX.WorkBook): MilestoneRow[] {
   const featureIndex = headers.findIndex((h) => h.includes("feature"));
   const valueIndex = headers.findIndex((h) => h.includes("businessvalue") || h.includes("value"));
   const monthIndex = headers.findIndex((h) => h.includes("month"));
+  const storiesIndex = headers.findIndex(
+    (h) => h.includes("userstor") || (h.includes("stories") && !h.includes("point")),
+  );
+  const pointsIndex = headers.findIndex((h) => h.includes("storypoint") || h.includes("points"));
 
   const cell = (row: unknown[], index: number) =>
     index === -1 ? "" : String(row[index] ?? "").replace(/\u00a0/g, " ").trim();
+  const num = (row: unknown[], index: number) => {
+    const raw = cell(row, index).replace(/,/g, "");
+    if (!raw) return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
 
   const out: MilestoneRow[] = [];
   grid.slice(headerIndex + 1).forEach((row) => {
     const feature = cell(row, featureIndex);
     const businessValue = cell(row, valueIndex);
     if (!feature && !businessValue) return;
-    out.push({ feature, businessValue, month: cell(row, monthIndex) });
+    out.push({
+      feature,
+      businessValue,
+      month: cell(row, monthIndex),
+      userStories: num(row, storiesIndex),
+      storyPoints: num(row, pointsIndex),
+    });
   });
   return out;
 }
