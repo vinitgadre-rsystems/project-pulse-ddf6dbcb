@@ -19,13 +19,37 @@ export function FeaturesPanel({
       })
     : milestones;
 
+  const totalStories = items.reduce((sum, item) => sum + (item.userStories ?? 0), 0);
+  const totalPoints = items.reduce((sum, item) => sum + (item.storyPoints ?? 0), 0);
+  const hasTotals = totalStories > 0 || totalPoints > 0;
+
   return (
     <section className="panel p-4">
-      <div className="flex items-center gap-2">
-        <Sparkles className="h-4 w-4 text-primary" />
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Features delivered{selected ? ` · ${month}` : " this month"}
-        </h3>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Features delivered{selected ? ` · ${month}` : " this month"}
+          </h3>
+        </div>
+        {hasTotals ? (
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 px-2 py-1">
+              <Layers className="h-3.5 w-3.5 text-primary" />
+              <span className="metric-figure text-sm font-bold text-primary">{totalStories}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                User stories
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 rounded-md border border-success/30 bg-success/10 px-2 py-1">
+              <Sigma className="h-3.5 w-3.5 text-success" />
+              <span className="metric-figure text-sm font-bold text-success">{totalPoints}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                Story points
+              </span>
+            </div>
+          </div>
+        ) : null}
       </div>
       {items.length === 0 ? (
         <p className="mt-3 text-xs text-muted-foreground">
