@@ -70,6 +70,8 @@ export function UploadDialog({ onSaved }: { onSaved: (id: string) => void }) {
         milestones: parsed.milestones,
         aiResources: parsed.aiResources,
         aiAgents: parsed.aiAgents,
+        prodSupportWeeks: parsed.prodSupportWeeks,
+        prodSupportPeople: parsed.prodSupportPeople,
 
 
         quality: parsed.quality,

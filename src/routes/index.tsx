@@ -18,6 +18,7 @@ import { VelocityChart } from "@/components/dashboard/Charts";
 import { DataTable } from "@/components/dashboard/DataTable";
 import { ItopsPanel } from "@/components/dashboard/ItopsPanel";
 import { AiSummaryPanel } from "@/components/dashboard/AiSummaryPanel";
+import { ProductionSupportPanel } from "@/components/dashboard/ProductionSupportPanel";
 import { JellyfishMetrics } from "@/components/dashboard/JellyfishMetrics";
 
 
@@ -368,6 +369,12 @@ function Dashboard() {
                 />
 
                 <VelocityChart rows={rows} dimension="sprint" />
+
+                <ProductionSupportPanel
+                  weeks={report.prod_support_weeks ?? []}
+                  people={report.prod_support_people ?? []}
+                  month={month === ALL ? undefined : month}
+                />
 
                 <AiSummaryPanel
                   rows={report.ai_resources ?? []}
