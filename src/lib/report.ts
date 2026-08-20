@@ -81,6 +81,18 @@ export type AiAgentRow = {
   month: string;
 };
 
+export type ProdSupportWeekRow = {
+  week: string;
+  dateRange: string;
+  issueCount: number;
+  month: string;
+};
+
+export type ProdSupportPersonRow = {
+  name: string;
+  issueCount: number;
+};
+
 export type TeamDetail = {
   team: string;
   month?: string;
@@ -108,6 +120,8 @@ export type ParsedReport = {
   ai: AiRow[];
   aiResources: AiResourceRow[];
   aiAgents: AiAgentRow[];
+  prodSupportWeeks: ProdSupportWeekRow[];
+  prodSupportPeople: ProdSupportPersonRow[];
   teamDetails: TeamDetail[];
   risks: RiskRow[];
   milestones: MilestoneRow[];
@@ -126,6 +140,8 @@ export type StoredReport = {
   ai?: AiRow[] | null;
   ai_resources?: AiResourceRow[] | null;
   ai_agents?: AiAgentRow[] | null;
+  prod_support_weeks?: ProdSupportWeekRow[] | null;
+  prod_support_people?: ProdSupportPersonRow[] | null;
   team_details?: TeamDetail[] | null;
   risks?: RiskRow[] | null;
   milestones?: MilestoneRow[] | null;
@@ -691,6 +707,8 @@ export function parseWorkbook(data: ArrayBuffer): ParsedReport {
     ai: parseAiSheet(workbook),
     aiResources: parseAiResourceSheet(workbook),
     aiAgents: parseAiAgentSheet(workbook),
+    prodSupportWeeks: parseProductionSupportSheet(workbook).weeks,
+    prodSupportPeople: parseProductionSupportSheet(workbook).people,
     teamDetails: parseTeamDetailsSheet(workbook),
     risks: parseRisksSheet(workbook),
     milestones: parseMilestoneSheet(workbook),
@@ -1118,4 +1136,71 @@ export function parseItopsServicesSheet(workbook: XLSX.WorkBook): ItopsServicesT
 
   if (rows.length === 0) return null;
   return { headers, rows };
+}
+
+export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
+  weeks: ProdSupportWeekRow[];
+  people: ProdSupportPersonRow[];
+} {
+  const empty = { weeks: [] as ProdSupportWeekRow[], people: [] as ProdSupportPersonRow[] };
+  const name = workbook.SheetNames.find((n) => {
+    const key = normalize(n);
+    return key.includes("productionsupport") || (key.includes("production") && key.includes("support")) || key === "prodsupport";
+  });
+  if (!name) return empty;
+  const sheet = workbook.Sheets[name]!;
+  const grid = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" });
+
+  const clean = (value: unknown) => String(value ?? "").replace(/\u00a0/g, " ").trim();
+  const weeks: ProdSupportWeekRow[] = [];
+  const people: ProdSupportPersonRow[] = [];
+
+  let mode: "none" | "weeks" | "people" = "none";
+  let idx: Record<string, number> = {};
+
+  grid.forEach((row) => {
+    const headers = row.map((cell) => normalize(clean(cell)));
+    const hasIssueCount = headers.some((h) => h.includes("issuecount") || (h.includes("issue") && h.includes("count")));
+    if (hasIssueCount && headers.some((h) => h === "week" || h.startsWith("week"))) {
+      mode = "weeks";
+      idx = {
+        week: headers.findIndex((h) => h.startsWith("week")),
+        range: headers.findIndex((h) => h.includes("daterange") || h.includes("range") || h.includes("date")),
+        count: headers.findIndex((h) => h.includes("issue")),
+        month: headers.findIndex((h) => h.includes("month")),
+      };
+      return;
+    }
+    if (hasIssueCount && headers.some((h) => h === "name" || h.includes("resource") || h.includes("engineer"))) {
+      mode = "people";
+      idx = {
+        name: headers.findIndex((h) => h === "name" || h.includes("resource") || h.includes("engineer")),
+        count: headers.findIndex((h) => h.includes("issue")),
+      };
+      return;
+    }
+
+    const nonEmpty = row.filter((cell) => clean(cell) !== "").length;
+    if (nonEmpty === 0) return;
+
+    if (mode === "weeks") {
+      const week = clean(row[idx['week']!]);
+      if (!week || normalize(week) === "total") return;
+      weeks.push({
+        week,
+        dateRange: idx['range']! === -1 ? "" : clean(row[idx['range']!]),
+        issueCount: (idx['count']! === -1 ? null : toNumber(row[idx['count']!])) ?? 0,
+        month: idx['month']! === -1 ? "" : clean(row[idx['month']!]),
+      });
+    } else if (mode === "people") {
+      const person = clean(row[idx['name']!]);
+      if (!person || normalize(person) === "total") return;
+      people.push({
+        name: person,
+        issueCount: (idx['count']! === -1 ? null : toNumber(row[idx['count']!])) ?? 0,
+      });
+    }
+  });
+
+  return { weeks, people };
 }
