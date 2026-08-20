@@ -112,6 +112,8 @@ export type MilestoneRow = {
   feature: string;
   businessValue: string;
   month: string;
+  userStories?: number | null;
+  storyPoints?: number | null;
 };
 
 export type ParsedReport = {
