@@ -3,6 +3,8 @@ import type {
   AiRow,
   AiResourceRow,
   AiAgentRow,
+  ProdSupportWeekRow,
+  ProdSupportPersonRow,
   ItopsRow,
   ItopsServicesTable,
   QualitySummary,
@@ -14,7 +16,7 @@ import type {
 } from "@/lib/report";
 
 const COLUMNS =
-  "id, name, file_name, uploaded_at, row_count, rows, itops, itops_services, ai, ai_resources, ai_agents, team_details, risks, milestones, quality";
+  "id, name, file_name, uploaded_at, row_count, rows, itops, itops_services, ai, ai_resources, ai_agents, prod_support_weeks, prod_support_people, team_details, risks, milestones, quality";
 
 
 export async function fetchReports(): Promise<StoredReport[]> {
@@ -36,6 +38,8 @@ export async function saveReport(input: {
   ai: AiRow[];
   aiResources: AiResourceRow[];
   aiAgents: AiAgentRow[];
+  prodSupportWeeks: ProdSupportWeekRow[];
+  prodSupportPeople: ProdSupportPersonRow[];
   teamDetails: TeamDetail[];
   risks: RiskRow[];
   milestones: MilestoneRow[];
@@ -56,6 +60,8 @@ export async function saveReport(input: {
       ai: input.ai as unknown as never,
       ai_resources: input.aiResources as unknown as never,
       ai_agents: input.aiAgents as unknown as never,
+      prod_support_weeks: input.prodSupportWeeks as unknown as never,
+      prod_support_people: input.prodSupportPeople as unknown as never,
       team_details: input.teamDetails as unknown as never,
       risks: input.risks as unknown as never,
       milestones: input.milestones as unknown as never,

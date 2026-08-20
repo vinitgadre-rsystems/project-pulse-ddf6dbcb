@@ -25,6 +25,8 @@ export type Database = {
           itops_services: Json | null
           milestones: Json
           name: string
+          prod_support_people: Json
+          prod_support_weeks: Json
           quality: Json
           risks: Json
           row_count: number
@@ -43,6 +45,8 @@ export type Database = {
           itops_services?: Json | null
           milestones?: Json
           name: string
+          prod_support_people?: Json
+          prod_support_weeks?: Json
           quality?: Json
           risks?: Json
           row_count?: number
@@ -61,6 +65,8 @@ export type Database = {
           itops_services?: Json | null
           milestones?: Json
           name?: string
+          prod_support_people?: Json
+          prod_support_weeks?: Json
           quality?: Json
           risks?: Json
           row_count?: number
