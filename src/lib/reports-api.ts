@@ -26,7 +26,7 @@ type QualityPayload = QualitySummary & {
 };
 
 function normalize(row: Record<string, unknown>): StoredReport {
-  const quality = (row.quality ?? null) as QualityPayload | null;
+  const quality = (row["quality"] ?? null) as QualityPayload | null;
   return {
     ...(row as unknown as StoredReport),
     prod_support_weeks: quality?.prodSupportWeeks ?? [],
