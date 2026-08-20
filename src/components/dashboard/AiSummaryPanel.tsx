@@ -207,7 +207,7 @@ export function AiSummaryPanel({
                     className="border-t border-border/50"
                   >
                     <td className="px-3 py-2 font-medium">
-                      {normalize(String(row.shared ?? "")) === "yes" ? (
+                      {String(row.shared ?? "").trim().toLowerCase() === "yes" ? (
                         <span className="text-primary">**</span>
                       ) : null}
                       {row.resource}
