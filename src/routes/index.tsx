@@ -314,7 +314,7 @@ function Dashboard() {
                   </Filter>
 
                   {teamDetail ? (
-                    <div className="flex items-center gap-6 rounded-lg border border-border bg-card px-6 py-3.5 shadow-sm">
+                    <div className="team-summary flex items-center gap-6 rounded-lg border px-6 py-3.5 shadow-sm">
                       <div>
                         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                           Team

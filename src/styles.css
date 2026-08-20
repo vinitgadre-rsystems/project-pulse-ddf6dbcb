@@ -179,3 +179,9 @@
   background: linear-gradient(135deg, color-mix(in oklch, var(--warning) 12%, transparent) 0%, color-mix(in oklch, var(--warning) 4%, transparent) 100%);
   border-color: color-mix(in oklch, var(--warning) 25%, var(--border));
 }
+
+@utility team-summary {
+  background: linear-gradient(135deg, color-mix(in oklch, var(--primary) 12%, transparent) 0%, color-mix(in oklch, var(--primary) 4%, transparent) 100%);
+  border-color: color-mix(in oklch, var(--primary) 25%, var(--border));
+}
+
