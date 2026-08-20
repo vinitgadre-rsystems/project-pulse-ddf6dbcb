@@ -1,0 +1,1 @@
+DELETE FROM public.reports WHERE id = 'bc2b8698-61eb-4d20-9728-0b9d72040712';

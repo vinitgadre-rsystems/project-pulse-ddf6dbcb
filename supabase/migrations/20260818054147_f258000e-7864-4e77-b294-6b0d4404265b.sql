@@ -1,0 +1,1 @@
+ALTER TABLE public.reports ADD COLUMN IF NOT EXISTS risks jsonb NOT NULL DEFAULT '[]'::jsonb;

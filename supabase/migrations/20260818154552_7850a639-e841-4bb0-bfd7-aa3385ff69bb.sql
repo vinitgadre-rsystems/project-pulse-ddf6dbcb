@@ -1,0 +1,1 @@
+ALTER TABLE public.reports ADD COLUMN IF NOT EXISTS ai_agents jsonb DEFAULT '[]'::jsonb;
