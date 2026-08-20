@@ -91,6 +91,7 @@ export type ProdSupportWeekRow = {
 export type ProdSupportPersonRow = {
   name: string;
   issueCount: number;
+  month?: string;
 };
 
 export type TeamDetail = {
@@ -1157,6 +1158,7 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
 
   let mode: "none" | "weeks" | "people" = "none";
   let idx: Record<string, number> = {};
+  let lastMonth = "";
 
   grid.forEach((row) => {
     const headers = row.map((cell) => normalize(clean(cell)));
@@ -1186,11 +1188,13 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
     if (mode === "weeks") {
       const week = clean(row[idx['week']!]);
       if (!week || normalize(week) === "total") return;
+      const rowMonth = idx['month']! === -1 ? "" : clean(row[idx['month']!]);
+      if (rowMonth) lastMonth = rowMonth;
       weeks.push({
         week,
         dateRange: idx['range']! === -1 ? "" : clean(row[idx['range']!]),
         issueCount: (idx['count']! === -1 ? null : toNumber(row[idx['count']!])) ?? 0,
-        month: idx['month']! === -1 ? "" : clean(row[idx['month']!]),
+        month: rowMonth,
       });
     } else if (mode === "people") {
       const person = clean(row[idx['name']!]);
@@ -1198,6 +1202,7 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
       people.push({
         name: person,
         issueCount: (idx['count']! === -1 ? null : toNumber(row[idx['count']!])) ?? 0,
+        month: lastMonth,
       });
     }
   });
