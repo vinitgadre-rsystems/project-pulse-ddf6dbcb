@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Layers, Sparkles, Sigma } from "lucide-react";
 
 import type { MilestoneRow } from "@/lib/report";
 
