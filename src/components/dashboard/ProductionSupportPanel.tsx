@@ -47,9 +47,18 @@ export function ProductionSupportPanel({
   }, [filteredWeeks]);
 
   const sortedPeople = useMemo(
-    () => [...people].sort((a, b) => b.issueCount - a.issueCount),
-    [people],
+    () =>
+      people
+        .filter(
+          (row) =>
+            !month ||
+            !row.month ||
+            row.month.trim().toLowerCase() === month.trim().toLowerCase(),
+        )
+        .sort((a, b) => b.issueCount - a.issueCount),
+    [people, month],
   );
+
   const peopleTotal = sortedPeople.reduce((sum, row) => sum + row.issueCount, 0);
   const topPerson = sortedPeople[0] ?? null;
 
