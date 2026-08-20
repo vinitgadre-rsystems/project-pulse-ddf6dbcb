@@ -29,7 +29,7 @@ export function FeaturesPanel({
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-primary" />
           <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Features delivered{selected ? ` · ${month}` : " this month"}
+            Features delivered{selected ? ` · ${month}` : " · All months"}
           </h3>
         </div>
         {hasTotals ? (
