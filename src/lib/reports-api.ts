@@ -16,8 +16,23 @@ import type {
 } from "@/lib/report";
 
 const COLUMNS =
-  "id, name, file_name, uploaded_at, row_count, rows, itops, itops_services, ai, ai_resources, ai_agents, prod_support_weeks, prod_support_people, team_details, risks, milestones, quality";
+  "id, name, file_name, uploaded_at, row_count, rows, itops, itops_services, ai, ai_resources, ai_agents, team_details, risks, milestones, quality";
 
+// Production Support data is stored inside the `quality` JSON payload so that
+// no additional database columns are required.
+type QualityPayload = QualitySummary & {
+  prodSupportWeeks?: ProdSupportWeekRow[];
+  prodSupportPeople?: ProdSupportPersonRow[];
+};
+
+function normalize(row: Record<string, unknown>): StoredReport {
+  const quality = (row["quality"] ?? null) as QualityPayload | null;
+  return {
+    ...(row as unknown as StoredReport),
+    prod_support_weeks: quality?.prodSupportWeeks ?? [],
+    prod_support_people: quality?.prodSupportPeople ?? [],
+  };
+}
 
 export async function fetchReports(): Promise<StoredReport[]> {
   const { data, error } = await supabase
@@ -26,7 +41,7 @@ export async function fetchReports(): Promise<StoredReport[]> {
     .order("uploaded_at", { ascending: false });
 
   if (error) throw new Error(error.message);
-  return (data ?? []) as unknown as StoredReport[];
+  return ((data ?? []) as unknown as Record<string, unknown>[]).map(normalize);
 }
 
 export async function saveReport(input: {
@@ -47,6 +62,12 @@ export async function saveReport(input: {
 }): Promise<StoredReport> {
   const { data: auth } = await supabase.auth.getUser();
 
+  const qualityPayload: QualityPayload = {
+    ...input.quality,
+    prodSupportWeeks: input.prodSupportWeeks,
+    prodSupportPeople: input.prodSupportPeople,
+  };
+
   const { data, error } = await supabase
     .from("reports")
     .insert({
@@ -60,17 +81,15 @@ export async function saveReport(input: {
       ai: input.ai as unknown as never,
       ai_resources: input.aiResources as unknown as never,
       ai_agents: input.aiAgents as unknown as never,
-      prod_support_weeks: input.prodSupportWeeks as unknown as never,
-      prod_support_people: input.prodSupportPeople as unknown as never,
       team_details: input.teamDetails as unknown as never,
       risks: input.risks as unknown as never,
       milestones: input.milestones as unknown as never,
-      quality: input.quality as unknown as never,
+      quality: qualityPayload as unknown as never,
     })
 
     .select(COLUMNS)
     .single();
 
   if (error) throw new Error(error.message);
-  return data as unknown as StoredReport;
+  return normalize(data as unknown as Record<string, unknown>);
 }
