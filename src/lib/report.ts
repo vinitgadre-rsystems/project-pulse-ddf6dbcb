@@ -1044,7 +1044,7 @@ export function parseAiResourceSheet(workbook: XLSX.WorkBook): AiResourceRow[] {
   const teamIndex = headers.findIndex((h) => h === "team" || h === "teamname");
   const resourceIndex = headers.findIndex((h) => h.includes("resource"));
   const monthIndex = headers.findIndex((h) => h.includes("month"));
-  const sharedIndex = headers.findIndex((h) => h === "shared");
+  const sharedIndex = headers.findIndex((h) => h.includes("shared"));
   const withAiIndex = headers.findIndex(
     (h) => h.includes("withai") || (h.includes("ticket") && h.includes("ai") && !h.includes("total")),
   );
