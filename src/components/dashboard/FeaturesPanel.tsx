@@ -64,10 +64,24 @@ export function FeaturesPanel({
             >
               <div className="flex items-start gap-2">
                 <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-primary" />
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="font-semibold text-foreground">{item.feature}</p>
                   {item.businessValue ? (
                     <p className="mt-0.5 text-muted-foreground">{item.businessValue}</p>
+                  ) : null}
+                  {item.userStories || item.storyPoints ? (
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      {item.userStories ? (
+                        <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                          {item.userStories} stories
+                        </span>
+                      ) : null}
+                      {item.storyPoints ? (
+                        <span className="rounded-full border border-success/30 bg-success/10 px-2 py-0.5 text-[10px] font-medium text-success">
+                          {item.storyPoints} pts
+                        </span>
+                      ) : null}
+                    </div>
                   ) : null}
                 </div>
               </div>
