@@ -192,6 +192,7 @@ export function AiSummaryPanel({
               <thead className="bg-surface/60 text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="px-3 py-2 text-left font-medium">Resource</th>
+                  <th className="px-3 py-2 text-left font-medium">Shared</th>
                   <th className="px-3 py-2 text-left font-medium">Team</th>
                   <th className="px-3 py-2 text-left font-medium">Month</th>
                   <th className="px-3 py-2 text-right font-medium">Tickets with AI</th>
@@ -205,7 +206,13 @@ export function AiSummaryPanel({
                     key={`${row.team}-${row.resource}-${row.month}-${index}`}
                     className="border-t border-border/50"
                   >
-                    <td className="px-3 py-2 font-medium">{row.resource}</td>
+                    <td className="px-3 py-2 font-medium">
+                      {String(row.shared ?? "").trim().toLowerCase() === "yes" ? (
+                        <span className="text-primary">**</span>
+                      ) : null}
+                      {row.resource}
+                    </td>
+                    <td className="px-3 py-2 text-muted-foreground">{row.shared ?? "—"}</td>
                     <td className="px-3 py-2 text-muted-foreground">{row.team || "—"}</td>
                     <td className="px-3 py-2 text-muted-foreground">{row.month}</td>
                     <td className="px-3 py-2 text-right tabular-nums">{row.ticketsWithAi}</td>
