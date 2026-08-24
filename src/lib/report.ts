@@ -1222,13 +1222,17 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
     } else if (mode === "people") {
       const person = clean(row[idx['name']!]);
       if (!person || normalize(person) === "total") return;
+      const monthIdx = idx['month'] ?? -1;
+      const rowMonth = monthIdx === -1 ? "" : clean(row[monthIdx]);
+      if (rowMonth) lastMonth = rowMonth;
       people.push({
         name: person,
         issueCount: (idx['count']! === -1 ? null : toNumber(row[idx['count']!])) ?? 0,
-        month: lastMonth,
+        month: rowMonth || lastMonth,
       });
     }
   });
+
 
   return { weeks, people };
 }
