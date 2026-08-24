@@ -21,7 +21,7 @@ import { computeMetrics, groupBy, sortLabels } from "@/lib/report";
 export const SERIES = [
   { key: "readinessPct", name: "Ticket readiness %", color: "var(--chart-1)" },
   { key: "completionPct", name: "Completed / committed %", color: "var(--chart-3)" },
-  { key: "hygienePct", name: "Process hygiene %", color: "var(--chart-4)" },
+  { key: "hygienePct", name: "Process hygiene (QA) %", color: "var(--chart-4)" },
 ] as const;
 
 type Point = Record<string, string | number | null>;
