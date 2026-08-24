@@ -168,12 +168,18 @@ export function KpiCards({
   metrics,
   milestones,
   month,
+  team,
 }: {
   metrics: Metrics;
   baseline?: Metrics;
   milestones?: MilestoneRow[] | undefined;
   month?: string | undefined;
+  team?: string | undefined;
 }) {
+  const isBh = (team ?? "").trim().toLowerCase() === "bh";
+  const staticKpis: StaticKpi[] = additionalKpis.map((kpi) =>
+    kpi.label === "Automation coverage" && !isBh ? { ...kpi, note: "" } : kpi,
+  );
   const kpis: Kpi[] = [
     {
       label: "Health score",
