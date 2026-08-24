@@ -371,11 +371,13 @@ function Dashboard() {
 
                 <VelocityChart rows={rows} dimension="sprint" />
 
-                <ProductionSupportPanel
-                  weeks={report.prod_support_weeks ?? []}
-                  people={report.prod_support_people ?? []}
-                  month={month === ALL ? undefined : month}
-                />
+                {team.trim().toLowerCase() === "bh" ? (
+                  <ProductionSupportPanel
+                    weeks={report.prod_support_weeks ?? []}
+                    people={report.prod_support_people ?? []}
+                    month={month === ALL ? undefined : month}
+                  />
+                ) : null}
 
                 <AiSummaryPanel
                   rows={report.ai_resources ?? []}
