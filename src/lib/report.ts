@@ -804,7 +804,7 @@ export function computeMetrics(rows: ReportRow[]): Metrics {
     (v): v is number => v !== null,
   );
   const healthScore = parts.length
-    ? parts.reduce((a, b) => a + b, 0) / parts.length
+    ? Math.min(100, parts.reduce((a, b) => a + b, 0) / parts.length)
     : null;
 
   return {
