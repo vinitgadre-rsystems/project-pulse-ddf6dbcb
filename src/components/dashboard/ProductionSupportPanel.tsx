@@ -46,18 +46,23 @@ export function ProductionSupportPanel({
     return { total, avg, peak };
   }, [filteredWeeks]);
 
-  const sortedPeople = useMemo(
-    () =>
-      people
-        .filter(
-          (row) =>
-            !month ||
-            !row.month ||
-            row.month.trim().toLowerCase() === month.trim().toLowerCase(),
-        )
-        .sort((a, b) => b.issueCount - a.issueCount),
-    [people, month],
-  );
+  const sortedPeople = useMemo(() => {
+    const matched = people.filter(
+      (row) =>
+        !month ||
+        !row.month ||
+        row.month.trim().toLowerCase() === month.trim().toLowerCase(),
+    );
+    const merged = new Map<string, ProdSupportPersonRow>();
+    matched.forEach((row) => {
+      const key = row.name.trim().toLowerCase();
+      const existing = merged.get(key);
+      if (existing) existing.issueCount += row.issueCount;
+      else merged.set(key, { ...row });
+    });
+    return [...merged.values()].sort((a, b) => b.issueCount - a.issueCount);
+  }, [people, month]);
+
 
   const peopleTotal = sortedPeople.reduce((sum, row) => sum + row.issueCount, 0);
   const topPerson = sortedPeople[0] ?? null;
