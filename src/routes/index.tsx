@@ -366,6 +366,7 @@ function Dashboard() {
                   metrics={metrics}
                   milestones={report.milestones ?? []}
                   month={month === ALL ? undefined : month}
+                  team={team}
                 />
 
                 <VelocityChart rows={rows} dimension="sprint" />

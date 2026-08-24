@@ -294,7 +294,7 @@ export function KpiCards({
         <div className="sla-dependency mt-4 rounded-lg border p-4">
           <h4 className="mb-3 text-sm font-semibold text-foreground">Can not be tracked - Rethink Dependencies</h4>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {additionalKpis.map((kpi) => (
+            {staticKpis.map((kpi) => (
               <StaticKpiCard key={kpi.label} kpi={kpi} />
             ))}
           </div>
