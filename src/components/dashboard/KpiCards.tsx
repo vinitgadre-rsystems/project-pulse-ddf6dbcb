@@ -196,7 +196,7 @@ export function KpiCards({
       warningThreshold: 70,
     },
     {
-      label: "Process hygiene",
+      label: "Process hygiene (QA)",
       value: metrics.hygienePct,
       hint: "Hygiene passes / total tickets.\nTest cases must be linked to every user story/Epic\nin the sprint with accurate status and test results Expected ≥97%",
       icon: CheckCircle2,

@@ -30,7 +30,7 @@ const columns: Column[] = [
   },
   {
     key: "hygienePct",
-    label: "Hygiene %",
+    label: "Hygiene (QA) %",
     numeric: true,
     value: (r) => computeMetrics([r]).hygienePct,
   },

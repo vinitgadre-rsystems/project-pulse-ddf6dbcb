@@ -876,7 +876,7 @@ export function exportReport(rows: ReportRow[], fileName: string) {
     Completed: row.completed,
     "Completed to committed %": pct(row.completed, row.committed),
     "Process hygiene": row.hygiene,
-    "Process hygiene %": pct(row.hygiene, row.totalTickets),
+    "Process hygiene (QA) %": pct(row.hygiene, row.totalTickets),
   }));
 
   const summary = groupBy(rows, "team").map(({ label, metrics }) => ({
@@ -885,7 +885,7 @@ export function exportReport(rows: ReportRow[], fileName: string) {
     "Ticket readiness %": metrics.readinessPct,
     "Self QA %": metrics.selfQaPct,
     "Completed to committed %": metrics.completionPct,
-    "Process hygiene %": metrics.hygienePct,
+    "Process hygiene (QA) %": metrics.hygienePct,
     "Health score": metrics.healthScore,
   }));
 
