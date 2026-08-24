@@ -188,12 +188,6 @@ export function KpiCards({
       icon: ClipboardCheck,
     },
     {
-      label: "Self QA compliance",
-      value: metrics.selfQaPct,
-      hint: "% of tickets where “Self QA checklist” is completed before handoff. Expected ≥ 90 %",
-      icon: CheckCircle,
-    },
-    {
       label: "Completed to committed",
       value: metrics.completionPct,
       hint: `${metrics.completed} of ${metrics.committed} committed.\n% of story points committed vs completed within sprint Expected ≥80%`,
