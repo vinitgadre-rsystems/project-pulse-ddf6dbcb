@@ -178,7 +178,7 @@ export function KpiCards({
     {
       label: "Health score",
       value: metrics.healthScore,
-      hint: "Average of readiness, self QA, completion and hygiene scores.",
+      hint: "Average of readiness, completed to committed and hygiene scores.",
       icon: HeartPulse,
     },
     {
