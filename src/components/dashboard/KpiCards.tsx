@@ -159,7 +159,9 @@ function StaticKpiCard({ kpi }: { kpi: StaticKpi }) {
           {kpi.target}
         </p>
       </div>
-      <p className="mt-2 text-xs font-medium text-destructive">{kpi.note}</p>
+      {kpi.note ? (
+        <p className="mt-2 text-xs font-medium text-destructive">{kpi.note}</p>
+      ) : null}
     </div>
   );
 }
