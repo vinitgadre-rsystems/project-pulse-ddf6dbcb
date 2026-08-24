@@ -159,7 +159,9 @@ function StaticKpiCard({ kpi }: { kpi: StaticKpi }) {
           {kpi.target}
         </p>
       </div>
-      <p className="mt-2 text-xs font-medium text-destructive">{kpi.note}</p>
+      {kpi.note ? (
+        <p className="mt-2 text-xs font-medium text-destructive">{kpi.note}</p>
+      ) : null}
     </div>
   );
 }
@@ -168,12 +170,18 @@ export function KpiCards({
   metrics,
   milestones,
   month,
+  team,
 }: {
   metrics: Metrics;
   baseline?: Metrics;
   milestones?: MilestoneRow[] | undefined;
   month?: string | undefined;
+  team?: string | undefined;
 }) {
+  const isBh = (team ?? "").trim().toLowerCase() === "bh";
+  const staticKpis: StaticKpi[] = additionalKpis.map((kpi) =>
+    kpi.label === "Automation coverage" && !isBh ? { ...kpi, note: "" } : kpi,
+  );
   const kpis: Kpi[] = [
     {
       label: "Health score",
@@ -286,7 +294,7 @@ export function KpiCards({
         <div className="sla-dependency mt-4 rounded-lg border p-4">
           <h4 className="mb-3 text-sm font-semibold text-foreground">Can not be tracked - Rethink Dependencies</h4>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {additionalKpis.map((kpi) => (
+            {staticKpis.map((kpi) => (
               <StaticKpiCard key={kpi.label} kpi={kpi} />
             ))}
           </div>
