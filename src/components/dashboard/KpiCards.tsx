@@ -35,6 +35,13 @@ type StaticKpi = {
 
 const additionalKpis: StaticKpi[] = [
   {
+    label: "Self QA compliance",
+    hint: "% of tickets where “Self QA checklist” is completed before handoff.",
+    target: "Expected ≥90%",
+    note: "Pending with Rethink",
+    icon: CheckCircle,
+  },
+  {
     label: "Reopened rate",
     hint: "% of QA returns\nFormula (Reopened / Tested) × 100%",
     target: "Expected ≤20%",
