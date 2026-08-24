@@ -1199,9 +1199,11 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
       idx = {
         name: headers.findIndex((h) => h === "name" || h.includes("resource") || h.includes("engineer")),
         count: headers.findIndex((h) => h.includes("issue")),
+        month: headers.findIndex((h) => h.includes("month")),
       };
       return;
     }
+
 
     const nonEmpty = row.filter((cell) => clean(cell) !== "").length;
     if (nonEmpty === 0) return;
