@@ -800,9 +800,9 @@ export function computeMetrics(rows: ReportRow[]): Metrics {
   const completionPct = pct(completed, committed);
   const hygienePct = pct(sum("hygiene"), totalTickets);
 
-  const parts = [readinessPct, completionPct, hygienePct].filter(
-    (v): v is number => v !== null,
-  );
+  const parts = [readinessPct, completionPct, hygienePct]
+    .filter((v): v is number => v !== null)
+    .map((v) => Math.min(100, v));
   const healthScore = parts.length
     ? Math.min(100, parts.reduce((a, b) => a + b, 0) / parts.length)
     : null;
