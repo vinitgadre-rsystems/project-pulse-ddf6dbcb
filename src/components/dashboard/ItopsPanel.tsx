@@ -448,6 +448,10 @@ export function ItopsPanel({
           <h4 className="mb-3 text-sm font-semibold text-foreground">
             Can not be tracked - Rethink Dependencies
           </h4>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Security
+          </p>
+
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {securityMetrics.map((metric) => (
               <SlaMetricCard key={metric.label} metric={metric} />
