@@ -424,7 +424,7 @@ export function ItopsPanel({
 
       <section className="panel flex flex-col p-5">
         <h3 className="mb-4 text-sm font-semibold tracking-wide text-muted-foreground">
-          Rethink SLAs
+          Can not be tracked - Rethink Dependencies
         </h3>
         <div className="mb-4">
           <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Security</h4>
@@ -434,7 +434,13 @@ export function ItopsPanel({
             <SlaMetricCard key={metric.label} metric={metric} />
           ))}
         </div>
-        <div className="mb-4 mt-8">
+      </section>
+
+      <section className="panel flex flex-col p-5">
+        <h3 className="mb-4 text-sm font-semibold tracking-wide text-muted-foreground">
+          Rethink SLAs
+        </h3>
+        <div className="mb-4">
           <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">DevOps</h4>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -442,6 +448,7 @@ export function ItopsPanel({
             <SlaMetricCard key={metric.label} metric={metric} />
           ))}
         </div>
+
         <div className="mb-4 mt-8">
           <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">HelpDesk</h4>
         </div>
