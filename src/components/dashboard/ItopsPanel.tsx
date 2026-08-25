@@ -424,20 +424,6 @@ export function ItopsPanel({
 
       <section className="panel flex flex-col p-5">
         <h3 className="mb-4 text-sm font-semibold tracking-wide text-muted-foreground">
-          Can not be tracked - Rethink Dependencies
-        </h3>
-        <div className="mb-4">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Security</h4>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {securityMetrics.map((metric) => (
-            <SlaMetricCard key={metric.label} metric={metric} />
-          ))}
-        </div>
-      </section>
-
-      <section className="panel flex flex-col p-5">
-        <h3 className="mb-4 text-sm font-semibold tracking-wide text-muted-foreground">
           Rethink SLAs
         </h3>
         <div className="mb-4">
@@ -457,7 +443,19 @@ export function ItopsPanel({
             <SlaMetricCard key={metric.label} metric={metric} />
           ))}
         </div>
+
+        <div className="sla-dependency mt-8 rounded-lg border p-4">
+          <h4 className="mb-3 text-sm font-semibold text-foreground">
+            Can not be tracked - Rethink Dependencies
+          </h4>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {securityMetrics.map((metric) => (
+              <SlaMetricCard key={metric.label} metric={metric} />
+            ))}
+          </div>
+        </div>
       </section>
+
 
 
       <ChartFrame
