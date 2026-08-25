@@ -136,7 +136,8 @@ function Dashboard() {
       if (monthRow) return monthRow;
     }
 
-    return undefined;
+    // Fallback: show the team's latest available headcount row
+    return teamRows[teamRows.length - 1];
   }, [report?.team_details, team, month]);
 
 
