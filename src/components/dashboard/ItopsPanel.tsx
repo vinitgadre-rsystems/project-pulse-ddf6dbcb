@@ -426,20 +426,20 @@ export function ItopsPanel({
         <h3 className="mb-4 text-sm font-semibold tracking-wide text-muted-foreground">
           Rethink SLAs
         </h3>
-        <div className="mb-4">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">DevOps</h4>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {devopsMetrics.map((metric) => (
-            <SlaMetricCard key={metric.label} metric={metric} />
-          ))}
-        </div>
-
-        <div className="sla-dependency mt-8 rounded-lg border p-4">
+        <div className="sla-dependency rounded-lg border p-4">
           <h4 className="mb-3 text-sm font-semibold text-foreground">
             Can not be tracked - Rethink Dependencies
           </h4>
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            DevOps
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {devopsMetrics.map((metric) => (
+              <SlaMetricCard key={metric.label} metric={metric} />
+            ))}
+          </div>
+
+          <p className="mb-3 mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Security
           </p>
 
