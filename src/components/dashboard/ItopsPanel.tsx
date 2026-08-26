@@ -435,18 +435,6 @@ export function ItopsPanel({
           ))}
         </div>
 
-        <div className="sla-agreed mt-8 rounded-lg border p-4">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            HelpDesk
-          </p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {helpdeskMetrics.map((metric) => (
-              <SlaMetricCard key={metric.label} metric={metric} />
-            ))}
-          </div>
-        </div>
-
-
         <div className="sla-dependency mt-8 rounded-lg border p-4">
           <h4 className="mb-3 text-sm font-semibold text-foreground">
             Can not be tracked - Rethink Dependencies
@@ -460,7 +448,17 @@ export function ItopsPanel({
               <SlaMetricCard key={metric.label} metric={metric} />
             ))}
           </div>
+
+          <p className="mb-3 mt-8 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            HelpDesk
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {helpdeskMetrics.map((metric) => (
+              <SlaMetricCard key={metric.label} metric={metric} />
+            ))}
+          </div>
         </div>
+
       </section>
 
 
