@@ -232,12 +232,24 @@ function Dashboard() {
               </DropdownMenu>
             </div>
 
-            <UploadDialog
-              onSaved={(id) => {
-                void queryClient.invalidateQueries({ queryKey: ["reports"] });
-                setReportId(id);
-              }}
-            />
+            <div className="flex flex-col items-end gap-1">
+              <UploadDialog
+                onSaved={(id) => {
+                  void queryClient.invalidateQueries({ queryKey: ["reports"] });
+                  setReportId(id);
+                }}
+              />
+              {report?.uploaded_at ? (
+                <span className="text-[11px] text-muted-foreground">
+                  Last updated:{" "}
+                  {new Date(report.uploaded_at).toLocaleString(undefined, {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </span>
+              ) : null}
+            </div>
+
             {session ? (
               <Button
                 variant="ghost"
