@@ -23,7 +23,27 @@ type Kpi = {
   icon: LucideIcon;
   successThreshold?: number;
   warningThreshold?: number;
+  expected?: number;
 };
+
+function DeviationNote({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefined }) {
+  const expected = kpi.expected ?? 90;
+  const low = kpi.value !== null && kpi.value < expected;
+  const list = (reasons ?? []).filter(Boolean);
+  if (!low || list.length === 0) return null;
+  return (
+    <div className="mt-3 rounded-md border border-warning/40 bg-warning/10 p-2">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-warning">
+        Deviation reason
+      </p>
+      <ul className="mt-1 space-y-0.5 text-[11px] leading-relaxed text-muted-foreground">
+        {list.map((reason, index) => (
+          <li key={`${reason}-${index}`}>{reason}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 type StaticKpi = {
   label: string;
@@ -105,7 +125,7 @@ function barTone(
   return "bg-destructive";
 }
 
-function KpiCardContent({ kpi }: { kpi: Kpi }) {
+function KpiCardContent({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefined }) {
   return (
     <>
       <div className="flex items-start justify-between gap-3">
@@ -138,6 +158,7 @@ function KpiCardContent({ kpi }: { kpi: Kpi }) {
           style={{ width: `${Math.min(100, Math.max(0, kpi.value ?? 0))}%` }}
         />
       </div>
+      <DeviationNote kpi={kpi} reasons={reasons} />
     </>
   );
 }
@@ -171,12 +192,14 @@ export function KpiCards({
   milestones,
   month,
   team,
+  deviationReasons,
 }: {
   metrics: Metrics;
   baseline?: Metrics;
   milestones?: MilestoneRow[] | undefined;
   month?: string | undefined;
   team?: string | undefined;
+  deviationReasons?: string[] | undefined;
 }) {
   const isBh = (team ?? "").trim().toLowerCase() === "bh";
   const staticKpis: StaticKpi[] = additionalKpis.map((kpi) =>
@@ -194,6 +217,7 @@ export function KpiCards({
       value: metrics.readinessPct,
       hint: "% of tickets where “Readiness checklist” is completed before start. Expected ≥ 90 %",
       icon: ClipboardCheck,
+      expected: 90,
     },
     {
       label: "Completed to committed",
@@ -202,6 +226,7 @@ export function KpiCards({
       icon: Target,
       successThreshold: 80,
       warningThreshold: 70,
+      expected: 80,
     },
     {
       label: "Process hygiene (QA)",
@@ -210,6 +235,7 @@ export function KpiCards({
       icon: CheckCircle2,
       successThreshold: 97,
       warningThreshold: 80,
+      expected: 97,
     },
   ];
 
@@ -264,6 +290,7 @@ export function KpiCards({
               </p>
             </div>
           </div>
+          <DeviationNote kpi={{ ...health, expected: 90 }} reasons={deviationReasons} />
           <div className="mt-2 w-full border-t border-border/50 pt-2">
             <p className="text-xs text-success font-medium">
               ✅ DoD Achieved: Development complete and QA successfully validated
@@ -271,7 +298,7 @@ export function KpiCards({
           </div>
         </div>
 
-        <FeaturesPanel milestones={milestones} month={month} />
+        <FeaturesPanel milestones={milestones} month={month} team={team} />
       </div>
 
       <section className="panel flex flex-col p-5">
@@ -286,7 +313,7 @@ export function KpiCards({
                 key={kpi.label}
                 className="flex h-full flex-col rounded-lg border border-border/60 bg-surface/40 p-4"
               >
-                <KpiCardContent kpi={kpi} />
+                <KpiCardContent kpi={kpi} reasons={deviationReasons} />
               </div>
             ))}
           </div>
