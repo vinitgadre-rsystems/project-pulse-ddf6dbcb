@@ -34,7 +34,7 @@ function DeviationNote({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefi
   return (
     <div className="mt-3 rounded-md border border-warning/40 bg-warning/10 p-2">
       <p className="text-[10px] font-semibold uppercase tracking-wide text-warning">
-        Deviation reason
+        Deviation Reasons Completion Ratio
       </p>
       <ul className="mt-1 space-y-0.5 text-[11px] leading-relaxed text-muted-foreground">
         {list.map((reason, index) => (
@@ -313,7 +313,10 @@ export function KpiCards({
                 key={kpi.label}
                 className="flex h-full flex-col rounded-lg border border-border/60 bg-surface/40 p-4"
               >
-                <KpiCardContent kpi={kpi} reasons={deviationReasons} />
+                <KpiCardContent
+                  kpi={kpi}
+                  reasons={kpi.label === "Completed to committed" ? deviationReasons : undefined}
+                />
               </div>
             ))}
           </div>
