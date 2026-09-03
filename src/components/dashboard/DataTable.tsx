@@ -42,6 +42,11 @@ const columns: Column[] = [
     value: (r) => r.daysWithCommits ?? null,
   },
   { key: "prsCreated", label: "PRs Created", numeric: true, value: (r) => r.prsCreated ?? null },
+  {
+    key: "deviationReason",
+    label: "Deviation reason",
+    value: (r) => (r.deviationReason ?? "").trim() || "—",
+  },
 ];
 
 export function DataTable({ rows }: { rows: ReportRow[] }) {

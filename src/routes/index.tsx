@@ -376,6 +376,13 @@ function Dashboard() {
                 </section>
 
                 <KpiCards
+                  deviationReasons={Array.from(
+                    new Set(
+                      filteredRows
+                        .map((row) => (row.deviationReason ?? "").trim())
+                        .filter(Boolean),
+                    ),
+                  )}
                   metrics={metrics}
                   milestones={report.milestones ?? []}
                   month={month === ALL ? undefined : month}
