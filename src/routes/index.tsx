@@ -403,6 +403,7 @@ function Dashboard() {
                   rows={report.ai_resources ?? []}
                   agents={report.ai_agents ?? []}
                   month={month === ALL ? undefined : month}
+                  team={team}
                 />
 
                 {rows.length === 0 ? (

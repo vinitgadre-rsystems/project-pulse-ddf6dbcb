@@ -31,18 +31,27 @@ export function AiSummaryPanel({
   rows,
   agents = [],
   month,
+  team,
 }: {
   rows: AiResourceRow[];
   agents?: AiAgentRow[];
   month?: string | undefined;
+  team?: string | undefined;
 }) {
+  const teamKey = (team ?? "").trim().toLowerCase();
+  const matchesTeam = (value: string) => {
+    const other = value.trim().toLowerCase();
+    if (!teamKey) return true;
+    return other === teamKey || other.includes(teamKey) || teamKey.includes(other);
+  };
+
   const filtered = useMemo(
     () =>
       rows.filter((row) => {
         const monthOk = !month || monthKey(row.month) === monthKey(month);
-        return monthOk;
+        return monthOk && matchesTeam(row.team);
       }),
-    [rows, month],
+    [rows, month, teamKey],
   );
 
   const teams = useMemo(() => {
@@ -114,7 +123,7 @@ export function AiSummaryPanel({
             AI Summary
           </h3>
           <p className="text-xs text-muted-foreground">
-            {month ? `All teams · ${month}` : "All teams · all months"}
+            {team ? `Team ${team}` : "All teams"} · {month ?? "all months"}
           </p>
         </div>
       </div>
