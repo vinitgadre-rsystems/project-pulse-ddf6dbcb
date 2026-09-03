@@ -378,7 +378,7 @@ function Dashboard() {
                 <KpiCards
                   deviationReasons={Array.from(
                     new Set(
-                      filteredRows
+                      rows
                         .map((row) => (row.deviationReason ?? "").trim())
                         .filter(Boolean),
                     ),
