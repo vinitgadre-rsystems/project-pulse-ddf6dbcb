@@ -123,7 +123,7 @@ export function AiSummaryPanel({
             AI Summary
           </h3>
           <p className="text-xs text-muted-foreground">
-            {month ? `All teams · ${month}` : "All teams · all months"}
+            {team ? `Team ${team}` : "All teams"} · {month ?? "all months"}
           </p>
         </div>
       </div>
