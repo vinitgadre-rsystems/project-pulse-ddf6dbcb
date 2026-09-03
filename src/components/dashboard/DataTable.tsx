@@ -44,7 +44,7 @@ const columns: Column[] = [
   { key: "prsCreated", label: "PRs Created", numeric: true, value: (r) => r.prsCreated ?? null },
   {
     key: "deviationReason",
-    label: "Deviation reason",
+    label: "Deviation Reasons Completion Ratio",
     value: (r) => (r.deviationReason ?? "").trim() || "—",
   },
 ];
