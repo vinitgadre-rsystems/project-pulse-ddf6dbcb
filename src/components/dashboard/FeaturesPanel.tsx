@@ -5,19 +5,29 @@ import type { MilestoneRow } from "@/lib/report";
 export function FeaturesPanel({
   milestones = [],
   month,
+  team,
 }: {
   milestones?: MilestoneRow[] | undefined;
   month?: string | undefined;
+  team?: string | undefined;
 }) {
   const key = (value: string) => value.trim().toLowerCase();
   const selected = month && key(month) !== "all" ? key(month) : "";
 
-  const items = selected
+  const selectedTeam = team && key(team) !== "all" ? key(team) : "";
+  const byTeam = selectedTeam
     ? milestones.filter((item) => {
+        const other = key(item.team ?? "");
+        return !other || other === selectedTeam;
+      })
+    : milestones;
+
+  const items = selected
+    ? byTeam.filter((item) => {
         const other = key(item.month ?? "");
         return !other || other === selected || other.includes(selected) || selected.includes(other);
       })
-    : milestones;
+    : byTeam;
 
   const totalStories = items.reduce((sum, item) => sum + (item.userStories ?? 0), 0);
   const totalPoints = items.reduce((sum, item) => sum + (item.storyPoints ?? 0), 0);

@@ -18,6 +18,7 @@ export type ReportRow = {
   avgLeadTimeStories?: number;
   avgLeadTimeBugs?: number;
   avgLeadTimeSubTasks?: number;
+  deviationReason?: string;
 };
 
 export type RowIssue = {
@@ -110,6 +111,7 @@ export type RiskRow = {
 };
 
 export type MilestoneRow = {
+  team?: string;
   feature: string;
   businessValue: string;
   month: string;
@@ -193,6 +195,13 @@ const FIELD_ALIASES: Record<keyof ReportRow, string[]> = {
     "avgleadtimesubtask",
   ],
   avgLeadTimeAll: ["avgleadtimeall", "averageleadtimeall", "leadtimeall", "avgleadtime"],
+  deviationReason: [
+    "deviationreason",
+    "reasonfordeviation",
+    "deviationreasons",
+    "deviation",
+    "reason",
+  ],
 };
 
 const METRIC_ALIASES = {
@@ -684,6 +693,9 @@ export function parseWorkbook(data: ArrayBuffer): ParsedReport {
       committed: numbers['committed']!,
       completed: numbers['completed']!,
       hygiene: numbers['hygiene']!,
+      deviationReason: mapping.deviationReason
+        ? String(record[mapping.deviationReason] ?? "").replace(/\u00a0/g, " ").trim()
+        : "",
     });
   });
 
@@ -996,6 +1008,7 @@ export function parseMilestoneSheet(workbook: XLSX.WorkBook): MilestoneRow[] {
   const featureIndex = headers.findIndex((h) => h.includes("feature"));
   const valueIndex = headers.findIndex((h) => h.includes("businessvalue") || h.includes("value"));
   const monthIndex = headers.findIndex((h) => h.includes("month"));
+  const teamIndex = headers.findIndex((h) => h === "team" || h.includes("team"));
   const storiesIndex = headers.findIndex(
     (h) => h.includes("userstor") || (h.includes("stories") && !h.includes("point")),
   );
@@ -1016,6 +1029,7 @@ export function parseMilestoneSheet(workbook: XLSX.WorkBook): MilestoneRow[] {
     const businessValue = cell(row, valueIndex);
     if (!feature && !businessValue) return;
     out.push({
+      team: cell(row, teamIndex),
       feature,
       businessValue,
       month: cell(row, monthIndex),
