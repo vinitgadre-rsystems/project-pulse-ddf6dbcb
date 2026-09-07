@@ -103,10 +103,10 @@ function Dashboard() {
   );
 
   useEffect(() => {
-    setTeam(teams[0] ?? "");
+    setTeam(getDefaultTeam(teams));
     setSprint(ALL);
-    setMonth(ALL);
-  }, [reportId, teams]);
+    setMonth(getDefaultMonth(months));
+  }, [reportId, teams, months]);
 
 
   const rows = useMemo(
@@ -120,7 +120,8 @@ function Dashboard() {
     [allRows, team, sprint, month],
   );
 
-  const teamDefault = teams[0] ?? "";
+  const teamDefault = getDefaultTeam(teams);
+  const monthDefault = getDefaultMonth(months);
   const metrics = useMemo(() => computeMetrics(rows), [rows]);
   const baselineMetrics = useMemo(
     () => computeMetrics(allRows.filter((row) => row.team === team)),
