@@ -374,9 +374,9 @@ function Dashboard() {
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          setTeam(teams[0] ?? "");
+                          setTeam(teamDefault);
                           setSprint(ALL);
-                          setMonth(ALL);
+                          setMonth(monthDefault);
                         }}
 
                       >
