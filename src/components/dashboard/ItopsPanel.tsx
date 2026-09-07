@@ -480,14 +480,28 @@ export function ItopsPanel({
 
 
       <ChartFrame
-        title="ITOPS ticket volume by team"
-        description="Assigned, closed and pending tickets per team for the current selection."
+        title={consolidated ? "ITOPS ticket volume by month" : "ITOPS ticket volume by team"}
+        description={
+          consolidated
+            ? "Planned (assigned) vs actual (closed) and pending tickets across all teams, month by month."
+            : "Assigned, closed and pending tickets per team for the current selection."
+        }
         height={340}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={teamRows} margin={{ top: 8, right: 24, left: 42, bottom: 0 }}>
+          <BarChart
+            data={consolidated ? monthRows : teamRows}
+            margin={{ top: 8, right: 24, left: 42, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-            <XAxis dataKey="team" {...axisProps} interval={0} angle={-15} height={50} dy={10} />
+            <XAxis
+              dataKey={consolidated ? "month" : "team"}
+              {...axisProps}
+              interval={0}
+              angle={-15}
+              height={50}
+              dy={10}
+            />
             <YAxis
               {...axisProps}
               label={{
