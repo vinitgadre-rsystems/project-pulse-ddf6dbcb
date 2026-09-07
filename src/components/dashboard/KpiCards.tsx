@@ -33,7 +33,7 @@ function DeviationNote({
 }: {
   kpi: Kpi;
   reasons?: string[] | undefined;
-  title?: string;
+  title?: string | undefined;
 }) {
   const expected = kpi.expected ?? 90;
   const low = kpi.value !== null && kpi.value < expected;
