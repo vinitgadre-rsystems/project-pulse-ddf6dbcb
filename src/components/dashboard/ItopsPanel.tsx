@@ -345,6 +345,22 @@ export function ItopsPanel({
 
   const teamRows = useMemo(() => aggregate(filtered), [filtered]);
 
+  const consolidated = team === ALL && month === ALL;
+
+  const monthRows = useMemo(() => {
+    if (!consolidated) return [];
+    const map = new Map<string, { month: string; assigned: number; closed: number; pending: number }>();
+    filtered.forEach((row) => {
+      const current = map.get(row.month) ?? { month: row.month, assigned: 0, closed: 0, pending: 0 };
+      current.assigned += row.assigned;
+      current.closed += row.closed;
+      current.pending += row.pending;
+      map.set(row.month, current);
+    });
+    const order = sortLabels(Array.from(map.keys()), "month");
+    return order.map((key) => map.get(key)!);
+  }, [filtered, consolidated]);
+
   if (rows.length === 0) {
     return (
       <div className="space-y-6">
@@ -464,14 +480,28 @@ export function ItopsPanel({
 
 
       <ChartFrame
-        title="ITOPS ticket volume by team"
-        description="Assigned, closed and pending tickets per team for the current selection."
+        title={consolidated ? "ITOPS ticket volume by month" : "ITOPS ticket volume by team"}
+        description={
+          consolidated
+            ? "Planned (assigned) vs actual (closed) and pending tickets across all teams, month by month."
+            : "Assigned, closed and pending tickets per team for the current selection."
+        }
         height={340}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={teamRows} margin={{ top: 8, right: 24, left: 42, bottom: 0 }}>
+          <BarChart
+            data={consolidated ? monthRows : teamRows}
+            margin={{ top: 8, right: 24, left: 42, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-            <XAxis dataKey="team" {...axisProps} interval={0} angle={-15} height={50} dy={10} />
+            <XAxis
+              dataKey={consolidated ? "month" : "team"}
+              {...axisProps}
+              interval={0}
+              angle={-15}
+              height={50}
+              dy={10}
+            />
             <YAxis
               {...axisProps}
               label={{
