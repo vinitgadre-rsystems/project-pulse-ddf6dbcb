@@ -58,6 +58,17 @@ export const Route = createFileRoute("/")({
 
 const ALL = "__all__";
 
+function getDefaultTeam(teams: string[]) {
+  const bh = teams.find((t) => t.trim().toLowerCase() === "bh");
+  return bh ?? teams[0] ?? "";
+}
+
+function getDefaultMonth(months: string[]) {
+  const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
+  const match = months.find((m) => m.trim().toLowerCase() === currentMonth.toLowerCase());
+  return match ?? months[months.length - 1] ?? ALL;
+}
+
 function Dashboard() {
   const queryClient = useQueryClient();
   const [reportId, setReportId] = useState<string | null>(null);
