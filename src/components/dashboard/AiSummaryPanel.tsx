@@ -235,7 +235,6 @@ export function AiSummaryPanel({
             </table>
           </div>
         </>
-      )}
     </section>
   );
 }
