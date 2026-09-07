@@ -93,7 +93,7 @@ export function AiSummaryPanel({
     [filtered],
   );
 
-  if (rows.length === 0) return null;
+  if (rows.length === 0 || filtered.length === 0) return null;
 
   const thresholds = { success: 60, warning: 30 };
 
@@ -128,12 +128,7 @@ export function AiSummaryPanel({
         </div>
       </div>
 
-      {filtered.length === 0 ? (
-        <p className="rounded-lg border border-border/60 bg-surface/40 p-6 text-center text-sm text-muted-foreground">
-          No AI resource usage rows match the selected filters.
-        </p>
-      ) : (
-        <>
+      <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {metrics.map((m) => (
               <div
@@ -240,7 +235,6 @@ export function AiSummaryPanel({
             </table>
           </div>
         </>
-      )}
     </section>
   );
 }
