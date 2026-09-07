@@ -19,6 +19,7 @@ export type ReportRow = {
   avgLeadTimeBugs?: number;
   avgLeadTimeSubTasks?: number;
   deviationReason?: string;
+  deviationReasonReadiness?: string;
 };
 
 export type RowIssue = {
@@ -201,6 +202,13 @@ const FIELD_ALIASES: Record<keyof ReportRow, string[]> = {
     "deviationreasons",
     "deviation",
     "reason",
+  ],
+  deviationReasonReadiness: [
+    "deviationreasonticketreadiness",
+    "deviationreasonreadiness",
+    "deviationreasonsticketreadiness",
+    "ticketreadinessdeviationreason",
+    "readinessdeviationreason",
   ],
 };
 
@@ -695,6 +703,9 @@ export function parseWorkbook(data: ArrayBuffer): ParsedReport {
       hygiene: numbers['hygiene']!,
       deviationReason: mapping.deviationReason
         ? String(record[mapping.deviationReason] ?? "").replace(/\u00a0/g, " ").trim()
+        : "",
+      deviationReasonReadiness: mapping.deviationReasonReadiness
+        ? String(record[mapping.deviationReasonReadiness] ?? "").replace(/\u00a0/g, " ").trim()
         : "",
     });
   });
