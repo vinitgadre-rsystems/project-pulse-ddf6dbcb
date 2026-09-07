@@ -26,7 +26,15 @@ type Kpi = {
   expected?: number;
 };
 
-function DeviationNote({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefined }) {
+function DeviationNote({
+  kpi,
+  reasons,
+  title = "Deviation Reasons Completion Ratio",
+}: {
+  kpi: Kpi;
+  reasons?: string[] | undefined;
+  title?: string | undefined;
+}) {
   const expected = kpi.expected ?? 90;
   const low = kpi.value !== null && kpi.value < expected;
   const list = (reasons ?? []).filter(Boolean);
@@ -34,7 +42,7 @@ function DeviationNote({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefi
   return (
     <div className="mt-3 rounded-md border border-warning/40 bg-warning/10 p-2">
       <p className="text-[10px] font-semibold uppercase tracking-wide text-warning">
-        Deviation Reasons Completion Ratio
+        {title}
       </p>
       <ul className="mt-1 space-y-0.5 text-[11px] leading-relaxed text-muted-foreground">
         {list.map((reason, index) => (
@@ -125,7 +133,15 @@ function barTone(
   return "bg-destructive";
 }
 
-function KpiCardContent({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefined }) {
+function KpiCardContent({
+  kpi,
+  reasons,
+  noteTitle,
+}: {
+  kpi: Kpi;
+  reasons?: string[] | undefined;
+  noteTitle?: string | undefined;
+}) {
   return (
     <>
       <div className="flex items-start justify-between gap-3">
@@ -158,7 +174,7 @@ function KpiCardContent({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undef
           style={{ width: `${Math.min(100, Math.max(0, kpi.value ?? 0))}%` }}
         />
       </div>
-      <DeviationNote kpi={kpi} reasons={reasons} />
+      <DeviationNote kpi={kpi} reasons={reasons} title={noteTitle} />
     </>
   );
 }
@@ -193,6 +209,7 @@ export function KpiCards({
   month,
   team,
   deviationReasons,
+  readinessReasons,
 }: {
   metrics: Metrics;
   baseline?: Metrics;
@@ -200,6 +217,7 @@ export function KpiCards({
   month?: string | undefined;
   team?: string | undefined;
   deviationReasons?: string[] | undefined;
+  readinessReasons?: string[] | undefined;
 }) {
   const isBh = (team ?? "").trim().toLowerCase() === "bh";
   const staticKpis: StaticKpi[] = additionalKpis.map((kpi) =>
@@ -315,7 +333,18 @@ export function KpiCards({
               >
                 <KpiCardContent
                   kpi={kpi}
-                  reasons={kpi.label === "Completed to committed" ? deviationReasons : undefined}
+                  reasons={
+                    kpi.label === "Completed to committed"
+                      ? deviationReasons
+                      : kpi.label === "Ticket readiness compliance"
+                        ? readinessReasons
+                        : undefined
+                  }
+                  noteTitle={
+                    kpi.label === "Ticket readiness compliance"
+                      ? "Deviation Reasons Ticket Readiness"
+                      : undefined
+                  }
                 />
               </div>
             ))}
