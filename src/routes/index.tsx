@@ -58,6 +58,24 @@ export const Route = createFileRoute("/")({
 
 const ALL = "__all__";
 
+function getDefaultTeam(teams: string[]) {
+  const key = "bh";
+  const exact = teams.find((t) => t.trim().toLowerCase() === key);
+  if (exact) return exact;
+  const starts = teams.find((t) => t.trim().toLowerCase().startsWith(key));
+  return starts ?? teams[0] ?? "";
+}
+
+function getDefaultMonth(months: string[]) {
+  const current = new Date().toLocaleString("en-US", { month: "long" }).toLowerCase();
+  const current3 = current.slice(0, 3);
+  const match = months.find((m) => {
+    const normalized = m.trim().toLowerCase();
+    return normalized === current || normalized.startsWith(current) || normalized.startsWith(current3);
+  });
+  return match ?? months[months.length - 1] ?? ALL;
+}
+
 function Dashboard() {
   const queryClient = useQueryClient();
   const [reportId, setReportId] = useState<string | null>(null);
@@ -92,10 +110,10 @@ function Dashboard() {
   );
 
   useEffect(() => {
-    setTeam(teams[0] ?? "");
+    setTeam(getDefaultTeam(teams));
     setSprint(ALL);
-    setMonth(ALL);
-  }, [reportId, teams]);
+    setMonth(getDefaultMonth(months));
+  }, [reportId, teams, months]);
 
 
   const rows = useMemo(
@@ -109,7 +127,8 @@ function Dashboard() {
     [allRows, team, sprint, month],
   );
 
-  const teamDefault = teams[0] ?? "";
+  const teamDefault = getDefaultTeam(teams);
+  const monthDefault = getDefaultMonth(months);
   const metrics = useMemo(() => computeMetrics(rows), [rows]);
   const baselineMetrics = useMemo(
     () => computeMetrics(allRows.filter((row) => row.team === team)),
@@ -141,7 +160,7 @@ function Dashboard() {
   }, [report?.team_details, team, month]);
 
 
-  const filtersActive = team !== teamDefault || sprint !== ALL || month !== ALL;
+  const filtersActive = team !== teamDefault || sprint !== ALL || month !== monthDefault;
 
 
 
@@ -362,9 +381,9 @@ function Dashboard() {
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          setTeam(teams[0] ?? "");
+                          setTeam(teamDefault);
                           setSprint(ALL);
-                          setMonth(ALL);
+                          setMonth(monthDefault);
                         }}
 
                       >
