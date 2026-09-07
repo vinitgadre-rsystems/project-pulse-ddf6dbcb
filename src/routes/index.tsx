@@ -59,13 +59,20 @@ export const Route = createFileRoute("/")({
 const ALL = "__all__";
 
 function getDefaultTeam(teams: string[]) {
-  const bh = teams.find((t) => t.trim().toLowerCase() === "bh");
-  return bh ?? teams[0] ?? "";
+  const key = "bh";
+  const exact = teams.find((t) => t.trim().toLowerCase() === key);
+  if (exact) return exact;
+  const starts = teams.find((t) => t.trim().toLowerCase().startsWith(key));
+  return starts ?? teams[0] ?? "";
 }
 
 function getDefaultMonth(months: string[]) {
-  const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
-  const match = months.find((m) => m.trim().toLowerCase() === currentMonth.toLowerCase());
+  const current = new Date().toLocaleString("en-US", { month: "long" }).toLowerCase();
+  const current3 = current.slice(0, 3);
+  const match = months.find((m) => {
+    const normalized = m.trim().toLowerCase();
+    return normalized === current || normalized.startsWith(current) || normalized.startsWith(current3);
+  });
   return match ?? months[months.length - 1] ?? ALL;
 }
 
