@@ -133,7 +133,15 @@ function barTone(
   return "bg-destructive";
 }
 
-function KpiCardContent({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undefined }) {
+function KpiCardContent({
+  kpi,
+  reasons,
+  noteTitle,
+}: {
+  kpi: Kpi;
+  reasons?: string[] | undefined;
+  noteTitle?: string | undefined;
+}) {
   return (
     <>
       <div className="flex items-start justify-between gap-3">
@@ -166,7 +174,7 @@ function KpiCardContent({ kpi, reasons }: { kpi: Kpi; reasons?: string[] | undef
           style={{ width: `${Math.min(100, Math.max(0, kpi.value ?? 0))}%` }}
         />
       </div>
-      <DeviationNote kpi={kpi} reasons={reasons} />
+      <DeviationNote kpi={kpi} reasons={reasons} title={noteTitle} />
     </>
   );
 }
@@ -325,7 +333,18 @@ export function KpiCards({
               >
                 <KpiCardContent
                   kpi={kpi}
-                  reasons={kpi.label === "Completed to committed" ? deviationReasons : undefined}
+                  reasons={
+                    kpi.label === "Completed to committed"
+                      ? deviationReasons
+                      : kpi.label === "Ticket readiness compliance"
+                        ? readinessReasons
+                        : undefined
+                  }
+                  noteTitle={
+                    kpi.label === "Ticket readiness compliance"
+                      ? "Deviation Reasons Ticket Readiness"
+                      : undefined
+                  }
                 />
               </div>
             ))}

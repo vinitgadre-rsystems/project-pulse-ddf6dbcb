@@ -402,6 +402,13 @@ function Dashboard() {
                         .filter(Boolean),
                     ),
                   )}
+                  readinessReasons={Array.from(
+                    new Set(
+                      rows
+                        .map((row) => (row.deviationReasonReadiness ?? "").trim())
+                        .filter(Boolean),
+                    ),
+                  )}
                   metrics={metrics}
                   milestones={report.milestones ?? []}
                   month={month === ALL ? undefined : month}
