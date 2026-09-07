@@ -345,6 +345,22 @@ export function ItopsPanel({
 
   const teamRows = useMemo(() => aggregate(filtered), [filtered]);
 
+  const consolidated = team === ALL && month === ALL;
+
+  const monthRows = useMemo(() => {
+    if (!consolidated) return [];
+    const map = new Map<string, { month: string; assigned: number; closed: number; pending: number }>();
+    filtered.forEach((row) => {
+      const current = map.get(row.month) ?? { month: row.month, assigned: 0, closed: 0, pending: 0 };
+      current.assigned += row.assigned;
+      current.closed += row.closed;
+      current.pending += row.pending;
+      map.set(row.month, current);
+    });
+    const order = sortLabels(Array.from(map.keys()), "month");
+    return order.map((key) => map.get(key)!);
+  }, [filtered, consolidated]);
+
   if (rows.length === 0) {
     return (
       <div className="space-y-6">
