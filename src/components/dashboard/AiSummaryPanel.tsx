@@ -93,7 +93,7 @@ export function AiSummaryPanel({
     [filtered],
   );
 
-  if (rows.length === 0) return null;
+  if (rows.length === 0 || filtered.length === 0) return null;
 
   const thresholds = { success: 60, warning: 30 };
 
