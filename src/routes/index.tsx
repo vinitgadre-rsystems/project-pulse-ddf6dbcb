@@ -153,7 +153,7 @@ function Dashboard() {
   }, [report?.team_details, team, month]);
 
 
-  const filtersActive = team !== teamDefault || sprint !== ALL || month !== ALL;
+  const filtersActive = team !== teamDefault || sprint !== ALL || month !== monthDefault;
 
 
 
