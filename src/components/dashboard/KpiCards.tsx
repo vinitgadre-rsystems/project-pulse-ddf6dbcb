@@ -310,7 +310,7 @@ export function KpiCards({
           </div>
           <DeviationNote kpi={{ ...health, expected: 90 }} reasons={deviationReasons} />
           <div className="mt-2 w-full border-t border-border/50 pt-2">
-            <p className="text-sm font-medium text-primary">
+            <p className="text-base font-medium text-primary">
               DoD: Considered complete once development is finished and QA validation is successfully completed.
             </p>
           </div>
