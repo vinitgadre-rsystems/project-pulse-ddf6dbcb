@@ -345,7 +345,7 @@ export function ItopsPanel({
 
   const teamRows = useMemo(() => aggregate(filtered), [filtered]);
 
-  const consolidated = team === ALL && month === ALL;
+  const consolidated = month === ALL;
 
   const monthRows = useMemo(() => {
     if (!consolidated) return [];
