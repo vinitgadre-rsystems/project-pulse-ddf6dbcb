@@ -161,6 +161,10 @@ function AuthPage() {
           Continue with Google
         </Button>
 
+        <Button variant="outline" className="mt-3 w-full" onClick={sso} disabled={busy}>
+          Sign in with SSO (rsystems.com)
+        </Button>
+
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {mode === "signup" ? "Already have an account?" : "Need an account?"}{" "}
           <button
