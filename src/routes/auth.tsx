@@ -86,6 +86,25 @@ function AuthPage() {
     void navigate({ to: "/" });
   }
 
+  async function sso() {
+    const trimmed = email.trim().toLowerCase();
+    const domain = trimmed.split("@")[1];
+    if (!domain) {
+      toast.error("Enter your work email to sign in with SSO.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithSSO({
+      domain,
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) {
+      setBusy(false);
+      toast.error(error.message || "SSO sign-in failed. Please try again.");
+    }
+    // On success the browser redirects to the identity provider.
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-16">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
