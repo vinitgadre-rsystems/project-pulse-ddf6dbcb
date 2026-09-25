@@ -86,6 +86,20 @@ function AuthPage() {
     void navigate({ to: "/" });
   }
 
+  async function microsoft() {
+    setBusy(true);
+    const result = await lovable.auth.signInWithOAuth("microsoft", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setBusy(false);
+      toast.error("Microsoft sign-in failed. Please try again.");
+      return;
+    }
+    if (result.redirected) return;
+    void navigate({ to: "/" });
+  }
+
   async function sso() {
     const trimmed = email.trim().toLowerCase();
     const domain = trimmed.split("@")[1];
@@ -159,6 +173,10 @@ function AuthPage() {
 
         <Button variant="outline" className="w-full" onClick={google} disabled={busy}>
           Continue with Google
+        </Button>
+
+        <Button variant="outline" className="mt-3 w-full" onClick={microsoft} disabled={busy}>
+          Continue with Microsoft
         </Button>
 
         <Button variant="outline" className="mt-3 w-full" onClick={sso} disabled={busy}>
