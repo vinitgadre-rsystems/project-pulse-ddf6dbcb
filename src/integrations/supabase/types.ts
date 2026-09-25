@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reports: {
+        Row: {
+          ai: Json
+          ai_agents: Json | null
+          ai_resources: Json
+          file_name: string
+          id: string
+          itops: Json
+          itops_services: Json | null
+          milestones: Json
+          name: string
+          quality: Json
+          risks: Json
+          row_count: number
+          rows: Json
+          team_details: Json
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          ai?: Json
+          ai_agents?: Json | null
+          ai_resources?: Json
+          file_name: string
+          id?: string
+          itops?: Json
+          itops_services?: Json | null
+          milestones?: Json
+          name: string
+          quality?: Json
+          risks?: Json
+          row_count?: number
+          rows?: Json
+          team_details?: Json
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          ai?: Json
+          ai_agents?: Json | null
+          ai_resources?: Json
+          file_name?: string
+          id?: string
+          itops?: Json
+          itops_services?: Json | null
+          milestones?: Json
+          name?: string
+          quality?: Json
+          risks?: Json
+          row_count?: number
+          rows?: Json
+          team_details?: Json
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
