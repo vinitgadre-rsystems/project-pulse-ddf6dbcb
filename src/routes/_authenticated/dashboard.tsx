@@ -36,7 +36,7 @@ import { fetchReports } from "@/lib/reports-api";
 import { useSession } from "@/hooks/useSession";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "RethinkFirst Pulse – Health & Performance Dashboard | RSI" },
