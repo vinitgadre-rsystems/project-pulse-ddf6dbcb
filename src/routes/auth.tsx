@@ -37,7 +37,7 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && session) void navigate({ to: "/" });
+    if (!loading && session) void navigate({ to: "/dashboard" });
   }, [loading, session, navigate]);
 
   async function submit(event: React.FormEvent) {
@@ -63,7 +63,7 @@ function AuthPage() {
           password,
         });
         if (error) throw error;
-        void navigate({ to: "/" });
+        void navigate({ to: "/dashboard" });
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Authentication failed.");
@@ -83,7 +83,7 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
-    void navigate({ to: "/" });
+    void navigate({ to: "/dashboard" });
   }
 
   async function microsoft() {
@@ -97,7 +97,7 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
-    void navigate({ to: "/" });
+    void navigate({ to: "/dashboard" });
   }
 
   async function sso() {
