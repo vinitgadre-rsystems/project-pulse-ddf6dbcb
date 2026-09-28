@@ -72,20 +72,6 @@ function AuthPage() {
     }
   }
 
-  async function google() {
-    setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setBusy(false);
-      toast.error("Google sign-in failed. Please try again.");
-      return;
-    }
-    if (result.redirected) return;
-    void navigate({ to: "/dashboard" });
-  }
-
   async function microsoft() {
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("microsoft", {
