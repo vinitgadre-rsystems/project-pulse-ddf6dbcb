@@ -59,6 +59,7 @@ const CSP = [
 
 function applySecurityHeaders(response: Response): Response {
   response.headers.set("Content-Security-Policy", CSP);
+  response.headers.set("X-Frame-Options", "SAMEORIGIN");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   return response;
