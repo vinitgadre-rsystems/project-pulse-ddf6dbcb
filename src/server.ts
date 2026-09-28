@@ -47,8 +47,8 @@ function isH3SwallowedErrorBody(body: string): boolean {
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com data:",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
   "img-src 'self' data: blob: https:",
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.lovable.app https://*.lovable.dev wss:",
   "frame-ancestors 'self' https://*.lovable.app https://*.lovable.dev",
