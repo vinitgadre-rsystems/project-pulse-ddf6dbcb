@@ -157,11 +157,7 @@ function AuthPage() {
           <span className="h-px flex-1 bg-border" />
         </div>
 
-        <Button variant="outline" className="w-full" onClick={google} disabled={busy}>
-          Continue with Google
-        </Button>
-
-        <Button variant="outline" className="mt-3 w-full" onClick={microsoft} disabled={busy}>
+        <Button variant="outline" className="w-full" onClick={microsoft} disabled={busy}>
           Continue with Microsoft
         </Button>
 
