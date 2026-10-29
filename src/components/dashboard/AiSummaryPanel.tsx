@@ -11,6 +11,11 @@ const fmtNum = (value: number) =>
 
 const monthKey = (value: string) => value.trim().toLowerCase();
 
+// AI usage % always calculated from ticket counts; the stored value is only a
+// fallback for rows without ticket counts.
+const rowAiPct = (row: AiResourceRow) =>
+  row.totalTickets > 0 ? (row.ticketsWithAi / row.totalTickets) * 100 : row.aiUsagePct;
+
 function tone(value: number | null, thresholds: { success: number; warning: number }) {
   if (value === null) return "text-muted-foreground";
   if (value < 80) return "text-destructive";
@@ -88,7 +93,7 @@ export function AiSummaryPanel({
       [...filtered].sort((a, b) => {
         const monthCompare = a.month.localeCompare(b.month);
         if (monthCompare !== 0) return monthCompare;
-        return (b.aiUsagePct ?? -1) - (a.aiUsagePct ?? -1);
+        return (rowAiPct(b) ?? -1) - (rowAiPct(a) ?? -1);
       }),
     [filtered],
   );
@@ -224,10 +229,10 @@ export function AiSummaryPanel({
                     <td
                       className={cn(
                         "px-3 py-2 text-right font-semibold tabular-nums",
-                        tone(row.aiUsagePct, thresholds),
+                        tone(rowAiPct(row), thresholds),
                       )}
                     >
-                      {fmtPct(row.aiUsagePct)}
+                      {fmtPct(rowAiPct(row))}
                     </td>
                   </tr>
                 ))}
