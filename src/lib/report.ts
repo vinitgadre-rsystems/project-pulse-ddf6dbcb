@@ -1090,11 +1090,23 @@ export function parseAiResourceSheet(workbook: XLSX.WorkBook): AiResourceRow[] {
     if (!resource || normalize(resource) === "total") return;
     const ticketsWithAi = withAiIndex === -1 ? 0 : toNumber(row[withAiIndex]) ?? 0;
     const totalTickets = totalIndex === -1 ? 0 : toNumber(row[totalIndex]) ?? 0;
-    let usage = usageIndex === -1 ? null : toNumber(row[usageIndex]);
-    if (usage !== null && usage > 0 && usage <= 1 && !String(row[usageIndex]).includes("%")) {
+    // Always calculate AI usage % from ticket counts; fall back to the sheet's
+    // own column only when ticket counts are missing.
+    let usage: number | null =
+      totalTickets > 0
+        ? (ticketsWithAi / totalTickets) * 100
+        : usageIndex === -1
+          ? null
+          : toNumber(row[usageIndex]);
+    if (
+      usage !== null &&
+      usage > 0 &&
+      usage <= 1 &&
+      usageIndex !== -1 &&
+      !String(row[usageIndex]).includes("%")
+    ) {
       usage *= 100;
     }
-    if (usage === null && totalTickets > 0) usage = (ticketsWithAi / totalTickets) * 100;
     out.push({
       team,
       resource,
