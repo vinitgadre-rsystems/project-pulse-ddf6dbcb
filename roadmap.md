@@ -1,4 +1,4 @@
 # Roadmap
 
-- [ ] Calculate AI usage % in the AI Summary table from tickets-with-AI ÷ total tickets (fall back to the sheet's own % column only when ticket counts are missing). — in progress
-- [ ] Run routine security package update (TanStack pinned versions) before closing the turn.
+- [x] Calculate AI usage % in the AI Summary table from tickets-with-AI ÷ total tickets (display-time calculation; stored value only a fallback). Verified in the preview.
+- [x] Run routine security package update (TanStack pinned versions); applied, smallest fix to root error component props.
