@@ -5,6 +5,7 @@ import type {
   AiAgentRow,
   ProdSupportWeekRow,
   ProdSupportPersonRow,
+  FixFactoryData,
   ItopsRow,
   ItopsServicesTable,
   QualitySummary,
@@ -23,6 +24,7 @@ const COLUMNS =
 type QualityPayload = QualitySummary & {
   prodSupportWeeks?: ProdSupportWeekRow[];
   prodSupportPeople?: ProdSupportPersonRow[];
+  fixFactory?: FixFactoryData;
 };
 
 function normalize(row: Record<string, unknown>): StoredReport {
@@ -31,6 +33,7 @@ function normalize(row: Record<string, unknown>): StoredReport {
     ...(row as unknown as StoredReport),
     prod_support_weeks: quality?.prodSupportWeeks ?? [],
     prod_support_people: quality?.prodSupportPeople ?? [],
+    fix_factory: quality?.fixFactory ?? null,
   };
 }
 
@@ -55,6 +58,7 @@ export async function saveReport(input: {
   aiAgents: AiAgentRow[];
   prodSupportWeeks: ProdSupportWeekRow[];
   prodSupportPeople: ProdSupportPersonRow[];
+  fixFactory: FixFactoryData;
   teamDetails: TeamDetail[];
   risks: RiskRow[];
   milestones: MilestoneRow[];
@@ -66,6 +70,7 @@ export async function saveReport(input: {
     ...input.quality,
     prodSupportWeeks: input.prodSupportWeeks,
     prodSupportPeople: input.prodSupportPeople,
+    fixFactory: input.fixFactory,
   };
 
   const { data, error } = await supabase
