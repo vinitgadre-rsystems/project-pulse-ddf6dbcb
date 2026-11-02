@@ -18,6 +18,7 @@ import { VelocityChart } from "@/components/dashboard/Charts";
 import { DataTable } from "@/components/dashboard/DataTable";
 import { ItopsPanel } from "@/components/dashboard/ItopsPanel";
 import { AiSummaryPanel } from "@/components/dashboard/AiSummaryPanel";
+import { FixFactoryPanel } from "@/components/dashboard/FixFactoryPanel";
 import { ProductionSupportPanel } from "@/components/dashboard/ProductionSupportPanel";
 import { JellyfishMetrics } from "@/components/dashboard/JellyfishMetrics";
 
@@ -431,6 +432,10 @@ function Dashboard() {
                   month={month === ALL ? undefined : month}
                   team={team}
                 />
+
+                {team.trim().toLowerCase() === "bh" ? (
+                  <FixFactoryPanel data={report.fix_factory ?? null} />
+                ) : null}
 
                 {rows.length === 0 ? (
                   <div className="panel p-10 text-center text-sm text-muted-foreground">
