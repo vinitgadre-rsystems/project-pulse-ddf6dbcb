@@ -97,6 +97,40 @@ export type ProdSupportPersonRow = {
   month?: string;
 };
 
+export type FixFactoryMetric = {
+  label: string;
+  result: string;
+};
+
+export type FixFactoryPopulationRow = {
+  stage: string;
+  tickets: number | null;
+};
+
+export type FixFactoryEffectivenessRow = {
+  type: string;
+  reviewed: number | null;
+  usedAsIs: number | null;
+  usedAfterRework: number | null;
+  rejected: number | null;
+  usefulOverall: number | null;
+};
+
+export type FixFactoryStressRow = {
+  area: string;
+  range: string;
+};
+
+export type FixFactoryData = {
+  agentSteps: string[];
+  methodology: string[];
+  headline: FixFactoryMetric[];
+  population: FixFactoryPopulationRow[];
+  effectiveness: FixFactoryEffectivenessRow[];
+  diagnosis: FixFactoryMetric[];
+  stressTests: FixFactoryStressRow[];
+};
+
 export type TeamDetail = {
   team: string;
   month?: string;
@@ -129,6 +163,7 @@ export type ParsedReport = {
   aiAgents: AiAgentRow[];
   prodSupportWeeks: ProdSupportWeekRow[];
   prodSupportPeople: ProdSupportPersonRow[];
+  fixFactory: FixFactoryData;
   teamDetails: TeamDetail[];
   risks: RiskRow[];
   milestones: MilestoneRow[];
@@ -149,6 +184,7 @@ export type StoredReport = {
   ai_agents?: AiAgentRow[] | null;
   prod_support_weeks?: ProdSupportWeekRow[] | null;
   prod_support_people?: ProdSupportPersonRow[] | null;
+  fix_factory?: FixFactoryData | null;
   team_details?: TeamDetail[] | null;
   risks?: RiskRow[] | null;
   milestones?: MilestoneRow[] | null;
@@ -736,6 +772,7 @@ export function parseWorkbook(data: ArrayBuffer): ParsedReport {
     aiAgents: parseAiAgentSheet(workbook),
     prodSupportWeeks: parseProductionSupportSheet(workbook).weeks,
     prodSupportPeople: parseProductionSupportSheet(workbook).people,
+    fixFactory: parseFixFactorySheet(workbook),
     teamDetails: parseTeamDetailsSheet(workbook),
     risks: parseRisksSheet(workbook),
     milestones: parseMilestoneSheet(workbook),
@@ -1272,4 +1309,136 @@ export function parseProductionSupportSheet(workbook: XLSX.WorkBook): {
 
 
   return { weeks, people };
+}
+
+export function parseFixFactorySheet(workbook: XLSX.WorkBook): FixFactoryData {
+  const data: FixFactoryData = {
+    agentSteps: [],
+    methodology: [],
+    headline: [],
+    population: [],
+    effectiveness: [],
+    diagnosis: [],
+    stressTests: [],
+  };
+  const name = workbook.SheetNames.find((n) => {
+    const key = normalize(n);
+    return key.includes("fixfactory") || (key.includes("fix") && key.includes("factory"));
+  });
+  if (!name) return data;
+  const sheet = workbook.Sheets[name]!;
+  const grid = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: "" });
+
+  const clean = (value: unknown) => String(value ?? "").replace(/\u00a0/g, " ").trim();
+  // Numeric share cells (0.93) render as percentages; text cells stay as-is.
+  const formatResult = (value: unknown): string => {
+    if (typeof value === "number") {
+      return Number.isFinite(value)
+        ? value <= 1
+          ? `${Math.round(value * 100)}%`
+          : String(value)
+        : "";
+    }
+    return clean(value);
+  };
+
+  type Mode =
+    | "none"
+    | "agent"
+    | "methodology"
+    | "headline"
+    | "population"
+    | "effectiveness"
+    | "diagnosis"
+    | "stress";
+  let mode: Mode = "none";
+
+  grid.forEach((row) => {
+    const cells = row.map(clean);
+    const first = cells[0] ?? "";
+    const nonEmpty = cells.filter((cell) => cell !== "").length;
+    if (nonEmpty === 0) return;
+
+    const key = normalize(first);
+    if (key.includes("whatagentdoes")) {
+      mode = "agent";
+      return;
+    }
+    if (key === "methodology") {
+      mode = "methodology";
+      return;
+    }
+    if (
+      key.includes("evaluationpopulation") ||
+      key.includes("recommendationeffectiveness") ||
+      key.includes("stresstestresults")
+    ) {
+      mode = "none";
+      return;
+    }
+    if (key === "metric" && normalize(cells[1] ?? "") === "result") {
+      mode = "headline";
+      return;
+    }
+    if (key.includes("evaluationstage")) {
+      mode = "population";
+      return;
+    }
+    if (key.includes("suggestiontype")) {
+      mode = "effectiveness";
+      return;
+    }
+    if (key.includes("diagnosisaccuracy")) {
+      mode = "diagnosis";
+      return;
+    }
+    if (key === "area") {
+      mode = "stress";
+      return;
+    }
+
+    switch (mode) {
+      case "agent":
+      case "methodology":
+        if (nonEmpty === 1) {
+          if (mode === "agent") data.agentSteps.push(first);
+          else data.methodology.push(first);
+        }
+        break;
+      case "headline":
+      case "diagnosis":
+        if (nonEmpty >= 2) {
+          const metric: FixFactoryMetric = { label: first, result: formatResult(row[1]) };
+          if (mode === "headline") data.headline.push(metric);
+          else data.diagnosis.push(metric);
+        }
+        break;
+      case "population":
+        if (nonEmpty >= 2) {
+          data.population.push({ stage: first, tickets: toNumber(row[1]) });
+        }
+        break;
+      case "effectiveness":
+        if (nonEmpty >= 6) {
+          data.effectiveness.push({
+            type: first,
+            reviewed: toNumber(row[1]),
+            usedAsIs: toNumber(row[2]),
+            usedAfterRework: toNumber(row[3]),
+            rejected: toNumber(row[4]),
+            usefulOverall: toNumber(row[5]),
+          });
+        }
+        break;
+      case "stress":
+        if (nonEmpty >= 2) {
+          data.stressTests.push({ area: first, range: formatResult(row[1]) });
+        }
+        break;
+      default:
+        break;
+    }
+  });
+
+  return data;
 }
