@@ -38,12 +38,12 @@ function MetricCard({ metric }: { metric: FixFactoryMetric }) {
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </p>
-      <p className={cn("metric-figure mt-3 text-2xl font-bold", tone(pct))}>
+      <p className="metric-figure mt-3 text-2xl font-bold text-primary">
         {metric.result || "—"}
       </p>
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className={cn("h-full rounded-full transition-all", barTone(pct))}
+          className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }}
         />
       </div>
