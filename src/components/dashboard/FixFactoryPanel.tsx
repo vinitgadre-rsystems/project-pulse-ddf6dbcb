@@ -22,12 +22,6 @@ const tone = (value: number | null) => {
   return "text-destructive";
 };
 
-const barTone = (value: number | null) => {
-  if (value === null) return "bg-muted-foreground/30";
-  if (value >= 80) return "bg-success";
-  if (value >= 50) return "bg-warning";
-  return "bg-destructive";
-};
 
 function MetricCard({ metric }: { metric: FixFactoryMetric }) {
   const pct = pctFrom(metric.result);
@@ -38,12 +32,12 @@ function MetricCard({ metric }: { metric: FixFactoryMetric }) {
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </p>
-      <p className={cn("metric-figure mt-3 text-2xl font-bold", tone(pct))}>
+      <p className="metric-figure mt-3 text-2xl font-bold text-primary">
         {metric.result || "—"}
       </p>
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className={cn("h-full rounded-full transition-all", barTone(pct))}
+          className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${Math.min(100, Math.max(0, pct ?? 0))}%` }}
         />
       </div>
