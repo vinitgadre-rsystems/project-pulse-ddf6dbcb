@@ -194,26 +194,9 @@ export function FixFactoryPanel({ data }: { data?: FixFactoryData | null }) {
         </SubPanel>
       ) : null}
 
-      {data.stressTests.length > 0 ? (
-        <SubPanel title="Stress-test results">
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {data.stressTests.map((row, index) => {
-              const pct = pctFrom(row.range);
-              return (
-                <div key={`stress-${index}`} className="rounded-lg border border-border/60 p-3">
-                  <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    <FlaskConical className="h-3.5 w-3.5" />
-                    {row.area}
-                  </p>
-                  <p className={cn("metric-figure mt-2 text-lg font-semibold", tone(pct))}>
-                    {row.range || "—"}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </SubPanel>
-      ) : null}
+      {/* Stress-test results hidden per request */}
+
+
 
       {data.population.length > 0 ? (
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
