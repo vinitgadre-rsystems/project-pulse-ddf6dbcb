@@ -1,4 +1,4 @@
-import { Bot, ClipboardCheck, FlaskConical, ListChecks, Users } from "lucide-react";
+import { Bot, ClipboardCheck, ListChecks, Users } from "lucide-react";
 import type { FixFactoryData, FixFactoryMetric } from "@/lib/report";
 import { cn } from "@/lib/utils";
 
