@@ -31,10 +31,12 @@ const barTone = (value: number | null) => {
 
 function MetricCard({ metric }: { metric: FixFactoryMetric }) {
   const pct = pctFrom(metric.result);
+  // Render-time rename so older persisted reports show the new wording too.
+  const label = metric.label.replace(/incorrect direction/i, "Incorrect approach");
   return (
     <div className="flex flex-col rounded-xl border border-border/60 bg-surface/40 p-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {metric.label}
+        {label}
       </p>
       <p className={cn("metric-figure mt-3 text-2xl font-bold", tone(pct))}>
         {metric.result || "—"}
