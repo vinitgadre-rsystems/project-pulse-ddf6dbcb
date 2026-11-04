@@ -22,12 +22,6 @@ const tone = (value: number | null) => {
   return "text-destructive";
 };
 
-const barTone = (value: number | null) => {
-  if (value === null) return "bg-muted-foreground/30";
-  if (value >= 80) return "bg-success";
-  if (value >= 50) return "bg-warning";
-  return "bg-destructive";
-};
 
 function MetricCard({ metric }: { metric: FixFactoryMetric }) {
   const pct = pctFrom(metric.result);
