@@ -77,7 +77,9 @@ export function FixFactoryPanel({ data }: { data?: FixFactoryData | null }) {
     data.methodology.length > 0;
   if (!hasAny) return null;
 
-  const cards = [...data.headline, ...data.diagnosis];
+  const cards = [...data.headline, ...data.diagnosis].filter(
+    (metric) => !/application code usable without rework/i.test(metric.label),
+  );
 
   return (
     <section className="panel space-y-5 p-5">
